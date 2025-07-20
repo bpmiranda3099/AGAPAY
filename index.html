@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGAPAY - Rice Leaf Blast Detection Report</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Rice Leaf Blast Detection Report</h1>
+            <p>AGAPAY: Automated Guardian for Agricultural Plant Analysis for Yield Resilience</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="report-info">
+            <h2>Report Summary</h2>
+            <div class="info-grid">
+                <div>
+                    <p><strong>Date & Time:</strong> <span id="report-date-time">July 21, 2025, 10:00 AM</span></p>
+                    <p><strong>Device ID:</strong> <span id="device-id">RPI-MSI-001</span></p>
+                    <p><strong>Farmer/Field Name:</strong> <span id="field-name">Mang Tonyo's Farm - Plot 3</span></p>
+                </div>
+                <div>
+                    <p><strong>Location (Centroid):</strong> <span id="location-coords">14.3000° N, 120.9000° E</span></p>
+                    <p><strong>Total Scans:</strong> <span id="total-scans">150</span></p>
+                    <p><strong>Overall Field Health:</strong> <span id="overall-health" class="status-moderate">Moderate Risk</span></p>
+                </div>
+            </div>
+        </section>
+
+        <section class="health-overview">
+            <h2>Field Health Overview</h2>
+            <div class="health-metrics">
+                <div class="metric healthy-box">
+                    <h3>Healthy</h3>
+                    <p><span id="healthy-percentage">65</span>%</p>
+                </div>
+                <div class="metric early-infection-box">
+                    <h3>Early Infection</h3>
+                    <p><span id="early-infection-percentage">25</span>%</p>
+                </div>
+                <div class="metric advanced-infection-box">
+                    <h3>Advanced Infection</h3>
+                    <p><span id="advanced-infection-percentage">10</span>%</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="map-section">
+            <h2>Geospatial Infection Map</h2>
+            <p>Below is an interactive map visualizing the health status across the scanned area. The heatmap shows infection density with green (healthy), yellow (early infection), orange (moderate), and red (advanced infection) zones.</p>
+            <div class="map-controls">
+                <button id="toggleHeatmap" onclick="toggleHeatmap()">Toggle Heatmap</button>
+                <button id="toggleMarkers" onclick="toggleMarkers()">Toggle Markers</button>
+            </div>
+            <div id="mapid" style="height: 500px; width: 100%;"></div>
+            <p class="map-note">Drag and zoom to explore specific infected patches. Use controls above to toggle between heatmap and marker views.</p>
+        </section>
+
+        <section class="analytics-insights">
+            <h2>Analytical Insights & Recommendations</h2>
+            <div class="nlp-summary">
+                <h3>Summary and Advisory:</h3>
+                <p id="nlp-summary-text">
+                    A significant hotspot of <strong>advanced rice blast infection</strong> has been identified in the <strong>northern section</strong> of Field 3, specifically around coordinates <strong>14.3050° N, 120.9010° E</strong>. This area exhibits high disease severity and requires immediate attention. Early infection patches are also present in the central-eastern part, indicating potential spread if untreated.
+                </p>
+                <p id="temporal-trend-text">
+                    Over the past week, scans show a <strong>5% increase</strong> in the area affected by early infection, suggesting a progressing outbreak.
+                </p>
+            </div>
+
+            <div class="recommendations">
+                <h3>Recommended Actions:</h3>
+                <ul>
+                    <li><strong>Fungicide Application:</strong>
+                        <p>Apply <strong>Tricyclazole-based fungicide</strong> (e.g., 'BlastOff 25WP') at a dosage of <strong>20g per 16L of water</strong>.</p>
+                        <p><strong>Targeted Area:</strong> Northern section hotspot and central-eastern early infection zones. Avoid blanket application.</p>
+                        <p><strong>Timing:</strong> Within the next <strong>24-48 hours</strong> to prevent further spread.</p>
+                    </li>
+                    <li><strong>Monitoring:</strong> Continue daily monitoring of the central-eastern area for progression of early symptoms.</li>
+                    <li><strong>Environmental Considerations:</strong> Avoid application during heavy rainfall. Consult local weather forecasts.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="detailed-data">
+            <h2>Detailed Scan Log</h2>
+            <p>Below is a log of individual scan points. Data is exportable as CSV.</p>
+            <div class="table-container">
+                <table id="data-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Latitude</th>
+                            <th>Longitude</th>
+                            <th>Classification</th>
+                            <th>Confidence (%)</th>
+                            <th>Band 1 (410nm)</th>
+                            <th>Band 2 (440nm)</th>
+                            <th>...</th>
+                            <th>Band 10 (940nm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-07-21 09:30:15</td>
+                            <td>14.3012</td>
+                            <td>120.9005</td>
+                            <td class="status-healthy">Healthy</td>
+                            <td>98.5</td>
+                            <td>0.25</td>
+                            <td>0.30</td>
+                            <td>...</td>
+                            <td>0.65</td>
+                        </tr>
+                        <tr>
+                            <td>2025-07-21 09:31:02</td>
+                            <td>14.3050</td>
+                            <td>120.9010</td>
+                            <td class="status-advanced">Advanced Infection</td>
+                            <td>92.1</td>
+                            <td>0.15</td>
+                            <td>0.18</td>
+                            <td>...</td>
+                            <td>0.35</td>
+                        </tr>
+                        <tr>
+                            <td>2025-07-21 09:32:40</td>
+                            <td>14.3020</td>
+                            <td>120.8990</td>
+                            <td class="status-early">Early Infection</td>
+                            <td>85.9</td>
+                            <td>0.20</td>
+                            <td>0.25</td>
+                            <td>...</td>
+                            <td>0.50</td>
+                        </tr>
+                        </tbody>
+                </table>
+            </div>
+            <br>
+            <button onclick="exportCSV()">Export Data as CSV</button>
+        </section>
+
+        <section class="disclaimer">
+            <h2>Disclaimer</h2>
+            <p>
+                The information and recommendations provided in this report are based on multispectral sensor data and predictive models. While every effort has been made to ensure accuracy, these are advisory. Farmers should always consult with qualified agricultural experts for final decisions on crop management and intervention strategies.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Lyceum of the Philippines University – Department of Computer Studies. All rights reserved.</p>
+    </footer>
+
+    <script>
+        var map = L.map('mapid').setView([14.3000, 120.9000], 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        var heatmapData = [
+            [14.2980, 120.8980, 0.1], [14.2985, 120.8985, 0.1], [14.2990, 120.8990, 0.1],
+            [14.2995, 120.8995, 0.1], [14.3000, 120.9000, 0.1], [14.3005, 120.9005, 0.1],
+            [14.2975, 120.8975, 0.1], [14.2970, 120.8970, 0.1], [14.2965, 120.8965, 0.1],
+            
+            [14.3015, 120.8985, 0.4], [14.3020, 120.8990, 0.4], [14.3025, 120.8995, 0.4],
+            [14.3030, 120.9000, 0.4], [14.3010, 120.8980, 0.4], [14.3012, 120.8988, 0.4],
+            [14.3018, 120.8992, 0.4], [14.3022, 120.8997, 0.4],
+            
+            [14.3035, 120.9005, 0.7], [14.3040, 120.9010, 0.7], [14.3045, 120.9015, 0.7],
+            [14.3038, 120.9008, 0.7], [14.3042, 120.9012, 0.7],
+            
+            // Advanced infection hotspot (red)
+            [14.3050, 120.9010, 1.0], [14.3052, 120.9012, 1.0], [14.3048, 120.9008, 1.0],
+            [14.3055, 120.9015, 1.0], [14.3053, 120.9013, 1.0], [14.3051, 120.9011, 1.0],
+            [14.3049, 120.9009, 1.0], [14.3047, 120.9007, 1.0]
+        ];
+
+        // Create heatmap layer
+        var heatmapLayer = L.heatLayer(heatmapData, {
+            radius: 25,
+            blur: 15,
+            maxZoom: 17,
+            gradient: {
+                0.0: '#00ff00',  // Green for healthy
+                0.3: '#ffff00',  // Yellow for early infection
+                0.6: '#ffa500',  // Orange for moderate infection
+                1.0: '#ff0000'   // Red for advanced infection
+            }
+        }).addTo(map);
+
+        // Create marker layer group
+        var markersLayer = L.layerGroup();
+
+        // Example Markers with color coding
+        var healthyIcon = L.divIcon({
+            className: 'custom-marker healthy-marker',
+            html: '<div style="background-color: #28a745; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
+        });
+
+        var earlyIcon = L.divIcon({
+            className: 'custom-marker early-marker',
+            html: '<div style="background-color: #ffc107; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
+        });
+
+        var advancedIcon = L.divIcon({
+            className: 'custom-marker advanced-marker',
+            html: '<div style="background-color: #dc3545; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>',
+            iconSize: [16, 16],
+            iconAnchor: [8, 8]
+        });
+
+        // Add markers to the layer group
+        L.marker([14.3012, 120.9005], {icon: healthyIcon}).bindPopup('Healthy Area<br>Confidence: 98.5%').addTo(markersLayer);
+        L.marker([14.3050, 120.9010], {icon: advancedIcon}).bindPopup('Advanced Infection - Hotspot<br>Confidence: 92.1%').addTo(markersLayer);
+        L.marker([14.3020, 120.8990], {icon: earlyIcon}).bindPopup('Early Infection<br>Confidence: 85.9%').addTo(markersLayer);
+
+        // Add additional sample markers
+        L.marker([14.2995, 120.9000], {icon: healthyIcon}).bindPopup('Healthy Area<br>Confidence: 96.8%').addTo(markersLayer);
+        L.marker([14.3035, 120.9005], {icon: earlyIcon}).bindPopup('Early Infection<br>Confidence: 78.3%').addTo(markersLayer);
+        L.marker([14.3045, 120.9015], {icon: advancedIcon}).bindPopup('Advanced Infection<br>Confidence: 88.7%').addTo(markersLayer);
+
+        // Add markers to map initially
+        markersLayer.addTo(map);
+
+        // Toggle functions
+        var heatmapVisible = true;
+        var markersVisible = true;
+
+        function toggleHeatmap() {
+            if (heatmapVisible) {
+                map.removeLayer(heatmapLayer);
+                document.getElementById('toggleHeatmap').textContent = 'Show Heatmap';
+                heatmapVisible = false;
+            } else {
+                map.addLayer(heatmapLayer);
+                document.getElementById('toggleHeatmap').textContent = 'Hide Heatmap';
+                heatmapVisible = true;
+            }
+        }
+
+        function toggleMarkers() {
+            if (markersVisible) {
+                map.removeLayer(markersLayer);
+                document.getElementById('toggleMarkers').textContent = 'Show Markers';
+                markersVisible = false;
+            } else {
+                map.addLayer(markersLayer);
+                document.getElementById('toggleMarkers').textContent = 'Hide Markers';
+                markersVisible = true;
+            }
+        }
+
+        // Function to export table data to CSV
+        function exportCSV() {
+            let table = document.getElementById("data-table");
+            let rows = table.querySelectorAll("tr");
+            let csv = [];
+            for (let i = 0; i < rows.length; i++) {
+                let row = [], cols = rows[i].querySelectorAll("td, th");
+                for (let j = 0; j < cols.length; j++) {
+                    let data = cols[j].innerText.replace(/"/g, '""'); // Escape double quotes
+                    row.push('"' + data + '"'); // Enclose in double quotes
+                }
+                csv.push(row.join(","));
+            }
+            let csvString = csv.join("\n");
+            let a = document.createElement("a");
+            a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+            a.download = 'rice_blast_report_' + new Date().toISOString().slice(0,10) + '.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+    </script>
+</body>
+</html>
