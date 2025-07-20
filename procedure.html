@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGAPAY System Procedure - Workflow Process</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>AGAPAY System Procedure</h1>
+            <p>Comprehensive Workflow for Automated Agricultural Monitoring</p>
+        </div>
+    </header>
+
+    <main>
+
+        <section class="procedure-overview">
+            <h2>System Overview</h2>
+            <p>The AGAPAY (Autonomous Geospatial Agricultural Productivity Assessment System) follows a comprehensive three-phase procedure for automated field monitoring and analysis. This workflow ensures accurate data collection, real-time processing, and actionable insights for precision agriculture.</p>
+        </section>
+
+        <section class="map-section">
+            <h2>Complete System Workflow</h2>
+            <p>Below is an interactive sequence diagram visualizing the complete AGAPAY system workflow from initialization to data analysis and recommendations.</p>
+            <div class="mermaid" style="position: relative; z-index: 10001;">
+sequenceDiagram
+    participant User as Farmer/Operator
+    participant Device as AGAPAY Device
+    participant GNSS as GNSS System
+    participant Sensors as Multispectral Sensors
+    participant Robot as Scanning Robot
+    participant CNN as Local CNN Engine
+    participant Storage as Local Storage
+    participant GUI as Display Interface
+    participant Cloud as Cloud Server
+    participant Dashboard as Online Dashboard
+    participant Analytics as Analytics Engine
+
+    Note over User, Analytics: Phase 1: System Setup & Initialization
+    
+    User->>Device: Power On Device
+    Device->>Device: Perform System Check
+    Device->>Sensors: Check Component Status
+    Sensors-->>Device: Status OK
+    
+    Device->>GNSS: Request Satellite Lock
+    GNSS->>GNSS: Acquire Satellites
+    GNSS-->>Device: GPS Lock Established
+    
+    Device->>Sensors: Initiate Calibration
+    Sensors->>Sensors: White Diffuser Reading
+    Sensors-->>Device: Calibration Complete
+    
+    Device->>Robot: Deploy & Configure
+    Robot->>Robot: Self-Calibration
+    Robot-->>Device: Ready for Operation
+    
+    User->>Device: Define Scanning Path/Area
+    Device->>Robot: Load Path Configuration
+    Robot-->>Device: Path Accepted
+    
+    Note over User, Analytics: Phase 2: Automated Scanning Process
+    
+    User->>Device: Start Automated Scan
+    Device->>Robot: Begin Scanning Sequence
+    
+    loop For Each Scan Point
+        Robot->>Robot: Move to Next Position
+        Robot->>GNSS: Get Current Coordinates
+        GNSS-->>Robot: GPS Coordinates
+        Robot->>Sensors: Capture Multispectral Data
+        Sensors->>Sensors: Capture RGB (Optional)
+        Sensors-->>Robot: Raw Sensor Data
+        
+        Robot->>CNN: Send Data for Classification
+        CNN->>CNN: Process & Classify
+        CNN-->>Robot: Classification Results
+        
+        Robot->>Storage: Store Data to microSD
+        Storage-->>Robot: Data Stored
+        
+        Robot->>GUI: Send Real-time Results
+        GUI->>GUI: Update Display
+        GUI-->>User: Show Live Results
+        
+        Device->>Device: Check Path Complete?
+    end
+    
+    Device->>User: Scanning Complete
+    Device->>Storage: Generate Local Summary
+    Storage-->>User: Display Results Summary
+    
+    Note over User, Analytics: Phase 3: Data Management & Analysis
+    
+    Device->>Device: Check Internet Connection
+    
+    alt Internet Available
+        Device->>Cloud: Upload Scan Data
+        Cloud->>Cloud: Process & Store Data
+        Cloud-->>Device: Upload Successful
+        
+        Cloud->>Dashboard: Update Online Dashboard
+        Dashboard-->>User: Access Available
+        
+        Dashboard->>Analytics: Request Analysis
+        Analytics->>Analytics: Generate Reports
+        Analytics->>Analytics: Create GeoJSON Maps
+        Analytics->>Analytics: Perform Trend Analysis
+        Analytics->>Analytics: Generate NLP Summaries
+        Analytics-->>Dashboard: Complete Analytics
+        
+        Dashboard-->>User: Present Reports & Recommendations
+        User->>User: Make Informed Decisions
+        User->>User: Implement Interventions
+        
+    else No Internet
+        Device->>Storage: Mark for Later Sync
+        Storage-->>Device: Offline Mode Active
+        Note over Device, Storage: Data Sync Pending
+        
+        Device->>Device: Wait for Connection
+        Device->>Cloud: Auto-sync When Available
+        Cloud-->>Dashboard: Update When Connected
+    end
+    
+    User->>Device: System Shutdown
+    Device->>Device: Safe Power Down
+            </div>
+            <p class="map-note">The diagram shows the complete interaction flow between all system components during the three operational phases.</p>
+        </section>
+
+        <section class="analytics-insights">
+            <h2>Key Features</h2>
+            <div class="recommendations">
+                <ul>
+                    <li><strong>Autonomous Operation:</strong> Minimal human intervention required after initial setup</li>
+                    <li><strong>Real-time Processing:</strong> Live CNN classification and immediate feedback</li>
+                    <li><strong>Offline Capability:</strong> Local storage with automatic cloud sync when available</li>
+                    <li><strong>GPS Precision:</strong> Accurate positioning for mapping and repeat visits</li>
+                    <li><strong>Advanced Analytics:</strong> Cloud-based processing for comprehensive insights</li>
+                    <li><strong>User-Friendly Interface:</strong> Intuitive display and online dashboard</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 AGAPAY - Rice Leaf Blast Detection Report. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            sequence: {
+                diagramMarginX: 50,
+                diagramMarginY: 10,
+                actorMargin: 50,
+                width: 150,
+                height: 65,
+                boxMargin: 10,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageMargin: 35,
+                mirrorActors: true,
+                bottomMarginAdj: 1,
+                useMaxWidth: true,
+                rightAngles: false,
+                showSequenceNumbers: false
+            }
+        });
+    </script>
+</body>
+</html>
